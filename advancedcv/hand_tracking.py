@@ -27,7 +27,7 @@ class HandDetector(object):
                     self.mp_draw.draw_landmarks(img, handLms, self.mp_hands.HAND_CONNECTIONS)
         return img
 
-    def get_position(self, img, hand_number=0, draw=True):
+    def get_position(self, img, hand_number=0, draw=True, hand_landmarks=None):
 
         lm_list = []
         if self.results.multi_hand_landmarks:
@@ -38,7 +38,12 @@ class HandDetector(object):
                 h, w, c = img.shape
                 cx, cy = int(lm.x*w), int(lm.y*h)
 
-                lm_list.append([id, cx, cy])
                 if draw:
-                    cv2.circle(img, (cx, cy), 10, (255, 0, 255), cv2.FILLED)
+                    if hand_landmarks is None:
+                        cv2.circle(img, (cx, cy), 10, (255, 0, 255), cv2.FILLED)
+                        lm_list.append([id, cx, cy])
+                    else:
+                        if id in hand_landmarks:
+                            cv2.circle(img, (cx, cy), 10, (255, 0, 255), cv2.FILLED)
+                            lm_list.append([id, cx, cy])
         return lm_list
