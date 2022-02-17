@@ -35,7 +35,7 @@ while True:
 
         length = math.hypot(x2-x1, y1-y2)
 
-        # Hand range 50 - 300
+        # Hand range 30 - 300
         # Volume range 0 - 100
         volume = np.interp(length, [30, 250], [min_volume, max_volume])
         volume_bar = np.interp(length, [30, 250], [400, 150])
@@ -46,7 +46,7 @@ while True:
 
         cv2.rectangle(img, (50, 150), (85, 400), (255, 0, 0), 3)
         cv2.rectangle(img, (50, int(volume_bar)), (85, 400), (255, 0, 0), cv2.FILLED)
-        cv2.putText(img, str(round(volume)), (50, 130), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 3)
+        cv2.putText(img, f'{str(round(volume))}%', (50, 130), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 3)
 
     c_time = time.time()
     fps = 1/(c_time-p_time)
