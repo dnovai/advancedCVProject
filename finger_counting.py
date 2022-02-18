@@ -8,8 +8,6 @@ cap = cv2.VideoCapture(0)
 
 folder_path = "finger_images"
 my_list = os.listdir(folder_path)
-print(my_list.sort())
-print(my_list)
 overlay_list = []
 
 detector = htm.HandDetector()
