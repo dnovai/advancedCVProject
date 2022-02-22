@@ -47,8 +47,8 @@ while True:
 
         dist = (patterns - fingers)**2
         dist = np.sum(dist, axis=1)
-        min_value = min(dist)
-        min_index = dist.index(min_value)
+        min_index = np.argmin(dist)
+        print(min_index)
 
         # total_fingers = fingers.count(1)
         #
