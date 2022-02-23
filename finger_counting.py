@@ -5,10 +5,14 @@ import advancedcv.hand_tracking as htm
 import numpy as np
 import itertools
 
+w_cam, h_cam = 648, 480
+
 patterns = np.array(list(itertools.product([0, 1], repeat=5)))
 
 p_time = 0
 cap = cv2.VideoCapture(0)
+cap.set(3, w_cam)
+cap.set(4, h_cam)
 
 folder_path = "finger_images"
 my_list = os.listdir(folder_path)
@@ -60,7 +64,7 @@ while True:
     fps = 1/(c_time-p_time)
     p_time = c_time
     
-    # cv2.putText(img, f'FPS: {str(round(fps))}', (400, 70), cv2.FONT_HERSHEY_PLAIN, 5, (255, 0, 0), 3)
-    # cv2.imshow("Image", img)
+    cv2.putText(img, f'FPS: {str(round(fps))}', (50, 70), cv2.FONT_HERSHEY_PLAIN, 5, (255, 0, 0), 3)
+    cv2.imshow("Image", img)
     cv2.waitKey(1)
     
