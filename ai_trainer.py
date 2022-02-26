@@ -5,7 +5,6 @@ import advancedcv.pose_estimation as pdm
 
 
 cap = cv2.VideoCapture(0)
-
 detector = pdm.PoseDetector()
 
 p_time = 0
@@ -21,10 +20,10 @@ while True:
 
     if len(lm_list) != 0:
 
-        # # Right arm
+        # # Right arm landmarks:
         # detector.get_angle(img, 12, 14, 16)
 
-        # Left arm
+        # Left arm landmarks
         angle = detector.get_angle(img, 11, 13, 15)
         percentage = np.interp(angle, (210, 310), (0, 100))
         bar = np.interp(angle, (210, 310), (650, 100))
@@ -56,6 +55,8 @@ while True:
     c_time = time.time()
     fps = 1/(c_time-p_time)
     p_time = c_time
+
+    cv2.putText(img, f'FPS:{str(int(fps))}', (45, 45), cv2.FONT_HERSHEY_PLAIN, 4, (255, 0, 0), 4)
 
     cv2.imshow("Image", img)
     cv2.waitKey(1)
