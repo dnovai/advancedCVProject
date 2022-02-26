@@ -1,5 +1,6 @@
 import cv2
 import mediapipe as mp
+import math
 
 
 class PoseDetector(object):
@@ -31,6 +32,7 @@ class PoseDetector(object):
                                       self.min_detection_confidence,
                                       self.min_tracking_confidence)
         self.results = None
+        self.lm_list = None
 
     def find_pose(self, img, draw=True):
         img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -41,16 +43,34 @@ class PoseDetector(object):
                 for id, lm in enumerate(self.results.pose_landmarks.landmark):
                     h, w, c = img.shape
                     cx, cy = int(lm.x*w), int(lm.y*h)
-                    cv2.circle(img, (cx, cy), 10, (255, 0, 0), cv2.FILLED)
+                    cv2.circle(img, (cx, cy), 10, (0, 255, 0), cv2.FILLED)
         return img
 
     def get_position(self, img, draw=True):
-        lm_list = []
+        self.lm_list = []
         if self.results.pose_landmarks:
             for id, lm in enumerate(self.results.pose_landmarks.landmark):
                 h, w, c = img.shape
                 cx, cy = int(lm.x*w), int(lm.y*h)
-                lm_list.append([id, cx, cy])
+                self.lm_list.append([id, cx, cy])
                 if draw:
-                    cv2.circle(img, (cx, cy), 10, (255, 0, 0), cv2.FILLED)
-        return lm_list
+                    cv2.circle(img, (cx, cy), 10, (0, 255, 0), cv2.FILLED)
+        return self.lm_list
+
+    def get_angle(self, img, p1, p2, p3, draw=True):
+
+        x1, y1 = self.lm_list[p1][1:]
+        x2, y2 = self.lm_list[p2][1:]
+        x3, y3 = self.lm_list[p3][1:]
+
+        if draw:
+
+            cv2.line(img, (x1, y1), (x2, y2), (255, 255, 255), 3)
+            cv2.line(img, (x2, y2), (x3, y3), (255, 255, 255), 3)
+
+            cv2.circle(img, (x1, y1), 10, (0, 0, 255), cv2.FILLED)
+            cv2.circle(img, (x1, y1), 15, (0, 0, 255), 2)
+            cv2.circle(img, (x2, y2), 10, (0, 0, 255), cv2.FILLED)
+            cv2.circle(img, (x2, y2), 15, (0, 0, 255), 2)
+            cv2.circle(img, (x3, y3), 10, (0, 0, 255), cv2.FILLED)
+            cv2.circle(img, (x3, y3), 15, (0, 0, 255), 2)

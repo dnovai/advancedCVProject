@@ -29,6 +29,7 @@ for im_path in my_list:
 key_ids = [4, 8, 12, 16, 20]
 
 while True:
+    
     success, img = cap.read()
     img = detector.find_hands(img, draw=False)
     lm_list = detector.get_position(img, hand_number=0, draw=False)
