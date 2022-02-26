@@ -38,8 +38,11 @@ class PoseDetector(object):
         img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         self.results = self.pose.process(img_rgb)
         if self.results.pose_landmarks:
-            self.mp_draw.draw_landmarks(img, self.results.pose_landmarks, self.mp_pose.POSE_CONNECTIONS)
+
             if draw:
+
+                self.mp_draw.draw_landmarks(img, self.results.pose_landmarks, self.mp_pose.POSE_CONNECTIONS)
+
                 for id, lm in enumerate(self.results.pose_landmarks.landmark):
                     h, w, c = img.shape
                     cx, cy = int(lm.x*w), int(lm.y*h)
@@ -63,6 +66,12 @@ class PoseDetector(object):
         x2, y2 = self.lm_list[p2][1:]
         x3, y3 = self.lm_list[p3][1:]
 
+        # Calculate the angle
+        angle = math.degrees(math.atan2(y3 - y2, x3 - x2)-math.atan2(y1 - y2, x1 - x2))
+
+        if angle < 0:
+            angle += 360
+
         if draw:
 
             cv2.line(img, (x1, y1), (x2, y2), (255, 255, 255), 3)
@@ -74,3 +83,7 @@ class PoseDetector(object):
             cv2.circle(img, (x2, y2), 15, (0, 0, 255), 2)
             cv2.circle(img, (x3, y3), 10, (0, 0, 255), cv2.FILLED)
             cv2.circle(img, (x3, y3), 15, (0, 0, 255), 2)
+            
+            cv2.putText(img, str(int(angle)), (x2 - 20, y2 + 50), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 255), 2)
+
+        return angle
