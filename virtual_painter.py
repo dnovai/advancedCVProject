@@ -13,7 +13,6 @@ my_list = os.listdir(folder_path)
 my_list.pop(0)
 my_list.sort()
 
-print(my_list)
 overlay_list = []
 
 for img_path in my_list:
@@ -36,10 +35,9 @@ while True:
     # Import the image
     success, img = cap.read()
     img = cv2.flip(img, 1)
-    print(np.shape(img), np.shape(img_canvas))
 
     # Find hand landmarks
-    img = detector.find_hands(img)
+    img = detector.find_hands(img, draw=False)
     lm_list = detector.get_position(img, draw=False)
 
     if len(lm_list) != 0:
@@ -62,7 +60,7 @@ while True:
                 elif 450 < x1 < 500:
                     header = overlay_list[1]
                     draw_color = (255, 0, 0)
-                elif 650 < x1 < 700:
+                elif 600 < x1 < 650:
                     header = overlay_list[2]
                     draw_color = (0, 255, 0)
                 elif 800 < x1 < 850:
@@ -95,9 +93,8 @@ while True:
 
     # Setting the header image
     img[0:110, 0:912] = header
-    img = cv2.addWeighted(img, 0.5, img_canvas, 0.5, 0.8)
+    img = cv2.addWeighted(img, 0.8, img_canvas, 0.2, 0)
     cv2.imshow('Image', img)
-   #cv2.imshow('Canvas', img_canvas)
     cv2.waitKey(1)
 
 
