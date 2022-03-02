@@ -8,6 +8,7 @@ opencv-python = "*"
 mediapipe = "*"
 osascript = "*"
 numpy = "*"
+autopy = "*"
 
 [dev-packages]
 
