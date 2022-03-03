@@ -31,6 +31,8 @@ img_canvas = np.zeros((540, 960, 3), np.uint8)
 detector = htm.HandDetector(detection_confidence=0.85)
 xp, yp = 0, 0
 
+p_time = 0
+
 while True:
     # Import the image
     success, img = cap.read()
@@ -84,6 +86,10 @@ while True:
                 cv2.line(img_canvas, (xp, yp), (x1, y1), draw_color, brush_thickness)
             
             xp, yp = x1, y1
+
+    c_time = time.time()
+    fps = 1/(c_time - p_time)
+    p_time = c_time
             
     img_gray = cv2.cvtColor(img_canvas, cv2.COLOR_BGR2GRAY)
     _, img_inverse = cv2.threshold(img_gray, 50, 255, cv2.THRESH_BINARY_INV)
@@ -94,6 +100,7 @@ while True:
     # Setting the header image
     img[0:110, 0:912] = header
     img = cv2.addWeighted(img, 0.8, img_canvas, 0.2, 0)
+    cv2.putText(img, f'FPS: {str(int(fps))}', (40, 50), cv2.FONT_HERSHEY_PLAIN, 5, (255, 0, 0), 3)
     cv2.imshow('Image', img)
     cv2.waitKey(1)
 
